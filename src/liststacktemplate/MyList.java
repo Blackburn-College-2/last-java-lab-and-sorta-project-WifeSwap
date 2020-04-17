@@ -12,6 +12,8 @@ package liststacktemplate;
  */
 public class MyList<T> {
 
+    private ListNode head;
+
     /**
      * get the ith element stored in the list. Note that this does not return
      * the containing node, but the stored element in the node. Null if D.N.E.
@@ -20,7 +22,17 @@ public class MyList<T> {
      * @return
      */
     public T get(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ListNode currentNode = head;
+        for (int a = 0; a < i; a++) {
+            if (currentNode != null) {
+                currentNode = currentNode.getNext();
+            }
+        }
+        if (currentNode == null) {
+            return null;
+        } else {
+            return (T) currentNode.getValue();
+        }
     }
 
     /**
@@ -30,7 +42,20 @@ public class MyList<T> {
      * @return the modified list object
      */
     public MyList<T> add(T v) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (isEmpty()) {
+            head = new ListNode(v);
+            return this;
+        }
+        
+        ListNode currentNode = head;
+        int size = size();
+        for (int i = 0; i < size - 1; i++) {
+            if (currentNode.getNext() != null) {
+                currentNode = currentNode.getNext();
+            }
+        }
+        currentNode.setNext(new ListNode(v));
+        return this;
     }
 
     /**
@@ -44,7 +69,34 @@ public class MyList<T> {
         Be careful here! think about edge cases. If you choose to keep a
         'last' pointer, what if the element being removed is last?
          */
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (i == -1) {
+            return null;
+        }
+        if (i == 0) {
+            T value = (T) head.getValue();
+            head = head.getNext();
+            return value;
+        }
+        
+        ListNode currentNode = head;
+        ListNode tempNode = head;
+        T value = get(i + 1);
+        if (i == (size() - 1)) {
+            for (int a = 0; a < i - 1; a++) {
+                if (currentNode != null) {
+                    currentNode = currentNode.getNext();
+                }
+            }
+            currentNode.setNext(null);
+        } else {
+            for (int a = 0; a < i - 1; a++) {
+                if (currentNode != null) {
+                    currentNode = currentNode.getNext();
+                }
+            }
+            currentNode.setNext(currentNode.getNext().getNext());
+        }
+        return value;
     }
 
     /**
@@ -54,7 +106,21 @@ public class MyList<T> {
      * @return the index or -1 if not found.
      */
     public int indexOf(T v) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int size = size();
+        int position = -1;
+        //System.out.println("size is " + size);
+        for (int i = 0; i < size; i++) {
+//            if (get(i + 1) == v) {
+//                position = i+1;
+//                break;
+//            }
+            if (get(i) == v) {
+                position = i;
+                break;
+            }
+        }
+        //System.out.println(v + " is at " + position);
+        return position;
     }
 
     /**
@@ -66,7 +132,9 @@ public class MyList<T> {
      * ls.remove(3).remove(4)...
      */
     public MyList<T> remove(T v) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //System.out.println("removing " + v);
+        removeAtIndex(indexOf(v));
+        return this;
     }
 
     /**
@@ -75,7 +143,22 @@ public class MyList<T> {
      * @return the length/size.
      */
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (isEmpty()) {
+            return 0;
+        }        
+        ListNode currentNode = head;
+        boolean checkingSize = true;
+        int i = 0;
+        while (checkingSize) {
+            if (currentNode.getNext() != null) {
+                currentNode = currentNode.getNext();
+                i++;
+                //System.out.println(currentNode.getValue());
+            } else {
+                checkingSize = false;
+            }
+        }
+        return i + 1;
     }
 
     /**
@@ -84,7 +167,11 @@ public class MyList<T> {
      * @return true if list contains at least 1 element, false otherwise.
      */
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (head == null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -94,7 +181,15 @@ public class MyList<T> {
      */
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String currentString = "";
+        int size = size();
+        for (int i = 0; i < 1; i++) {
+            currentString = currentString + get(i);
+        }
+        for (int i = 1; i < size; i++) {
+            currentString = currentString + ", " + get(i);
+        }
+        return "MyList: [" + currentString + "]";
     }
 
 }
